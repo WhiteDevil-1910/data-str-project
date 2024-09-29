@@ -154,7 +154,7 @@ void game() {
         printf("Oops! The correct shortest distance from node %d to node %d is %d, but you entered %d. Don't worry, you'll get it next time!\n", src + 1, dest + 1, dist[dest], user_answer);
     }
 
-    // Randomly ask for the shortest distance between two nodes (which can be indirect)
+    // Randomly ask for the direct distance between two nodes
     int rand_node1 = rand() % num_nodes;
     int rand_node2 = rand() % num_nodes;
     while (rand_node1 == rand_node2) {
@@ -162,20 +162,16 @@ void game() {
     }
 
     printf("\nWhat is the shortest distance between node %d and node %d? ", rand_node1 + 1, rand_node2 + 1);
-    
-    // Calculate the shortest distance between the randomly chosen nodes using Dijkstra again
-    dijkstra(graph, num_nodes, rand_node1, dist);
-    
-    int shortest_distance_answer;
-    scanf("%d", &shortest_distance_answer);
+    int direct_distance_answer;
+    scanf("%d", &direct_distance_answer);
 
-    // Check user's answer for the shortest distance and respond accordingly
-    if (dist[rand_node2] == -1) {
-        printf("There is no path between node %d and node %d, but you entered %d.\n", rand_node1 + 1, rand_node2 + 1, shortest_distance_answer);
-    } else if (shortest_distance_answer == dist[rand_node2]) {
-        printf("Well done! The shortest distance between node %d and node %d is indeed %d.\n", rand_node1 + 1, rand_node2 + 1, dist[rand_node2]);
+    // Check user's answer for direct distance and respond accordingly
+    if (graph[rand_node1][rand_node2] == -1 && direct_distance_answer != -1) {
+        printf("There is no direct connection between node %d and node %d, but you entered %d.\n", rand_node1 + 1, rand_node2 + 1, direct_distance_answer);
+    } else if (direct_distance_answer == graph[rand_node1][rand_node2]) {
+        printf("Well done! The direct distance between node %d and node %d is indeed %d.\n", rand_node1 + 1, rand_node2 + 1, graph[rand_node1][rand_node2]);
     } else {
-        printf("Close! The shortest distance between node %d and node %d is actually %d, but you entered %d. Keep it up!\n", rand_node1 + 1, rand_node2 + 1, dist[rand_node2], shortest_distance_answer);
+        printf("Close! The direct distance between node %d and node %d is actually %d, but you entered %d. Keep it up!\n", rand_node1 + 1, rand_node2 + 1, graph[rand_node1][rand_node2], direct_distance_answer);
     }
 
     playAgain();
@@ -189,4 +185,13 @@ void playAgain() {
     if (choice == 'y' || choice == 'Y') {
         game(); // Start the game again
     } else {
-        printf
+        printf("Thanks for playing! See you next time!\n");
+    }
+}
+
+// Main function to initiate the game
+int main() {
+    srand(time(NULL));
+    game();
+    return 0;
+}
